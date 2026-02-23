@@ -1,53 +1,87 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Product index{% endblock %}
+{% block title %}Produits{% endblock %}
 
 {% block body %}
-    <div class="container mt-4">
-    
-        <div class="row mb-4">
+    <div>
+        <div class="row mb-5 align-items-end">
             <div class="col">
-                <h2>Products</h2>
+                <h1 class="display-5" style="font-weight: 700; color: #333;">🛍️ Produits</h1>
+                <p class="text-muted">Gérez votre catalogue de produits</p>
             </div>
-            <div class="col text-end">
-                <a href="{{ path('app_product_new') }}" class="btn btn-success">Create new</a>
+            <div class="col-auto">
+                <a href="{{ path('app_product_new') }}" class="btn rounded-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-weight: 500; padding: 8px 24px;">+ Nouveau produit</a>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm rounded-4">
+                    <div class="card-body">
+                        <form method="get" class="row g-3 align-items-end">
+                            <div class="col-md-4">
+                                <label class="form-label" style="font-weight: 600;">Filtre par catégorie</label>
+                                <select name="category" class="form-select rounded-3">
+                                    <option value="0">🍇 Toutes les catégories</option>
+                                    {% for cat in categories %}
+                                        <option value="{{ cat.id }}" {% if selectedCategory is not null and selectedCategory == cat.id %}selected{% endif %}>{{ cat.libelle }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label" style="font-weight: 600;">Filtre par qualité</label>
+                                <select name="qualite" class="form-select rounded-3">
+                                    <option value="0">⭐ Toutes les qualités</option>
+                                    {% for q in qualites %}
+                                        <option value="{{ q.id }}" {% if selectedQualite is not null and selectedQualite == q.id %}selected{% endif %}>{{ q.libelle }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-primary rounded-3 w-100" style="font-weight: 500;">🔍 Filtrer</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="row">
-            <div class="col">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Libelle</th>
-                            <th>Price</th>
-                            <th>Qualite</th>
-                            <th>Catégory</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for product in products %}
-                        <tr>
-                            <td>{{ product.id }}</td>
-                            <td>{{ product.libelle }}</td>
-                            <td>{{ product.price }}</td>
-                            <td>{{ product.qualite }}</td>
-                            <td>{{ product.category.libelle }}</td>
-                            <td>
-                                <a href="{{ path('app_product_show', {'id': product.id}) }}" class="btn btn-info btn-sm">Show</a>
-                                <a href="{{ path('app_product_edit', {'id': product.id}) }}" class="btn btn-primary btn-sm">Edit</a>
-                            </td>
-                        </tr>
-                    {% else %}
-                        <tr>
-                            <td colspan="5" class="text-center">No records found</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>  
+            {% if products is empty %}
+                <div class="col-12">
+                    <div class="alert alert-info border-0 rounded-4" style="background-color: #d1ecf1; color: #0c5460;">
+                        📭 Aucun produit trouvé. <a href="{{ path('app_product_new') }}" style="color: #0c5460; font-weight: 600;">Créer le premier</a>
+                    </div>
+                </div>
+            {% else %}
+                {% for product in products %}
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                        <div class="card border-0 shadow-sm rounded-4 h-100" style="transition: all 0.3s; overflow: hidden;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 12px 24px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 0.125rem 0.25rem rgba(0,0,0,0.075)'">
+                            {% if product.imageFilename %}
+                                <img src="{{ asset('uploads/products/' ~ product.imageFilename) }}" class="card-img-top" style="height: 180px; object-fit: cover;" alt="{{ product.libelle }}">
+                            {% else %}
+                                <div style="height: 180px; background: linear-gradient(135deg, #667eea15, #764ba215); display: flex; align-items: center; justify-content: center;">
+                                    <span style="color: #ccc; font-size: 48px;">📷</span>
+                                </div>
+                            {% endif %}
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title" style="font-weight: 700; color: #333;">{{ product.libelle }}</h5>
+                                <p class="text-muted small mb-2">{{ product.category ? product.category.libelle : '—' }}</p>
+                                {% if product.qualite %}
+                                    <span class="badge mb-2 rounded-3" style="background-color: {{ product.qualite.couleur }}; color: #fff; font-weight: 500; padding: 6px 12px;">{{ product.qualite.libelle }}</span>
+                                {% endif %}
+                                <p class="fs-6" style="font-weight: 700; color: #667eea; margin-bottom: 12px;">{{ product.price }} TND</p>
+                                <div class="mt-auto d-flex gap-2">
+                                    <a href="{{ path('app_product_show', {'id': product.id}) }}" class="btn btn-sm rounded-3" style="background-color: #667eea; color: white; border: none; flex: 1; font-weight: 500;">Voir</a>
+                                    <a href="{{ path('app_product_edit', {'id': product.id}) }}" class="btn btn-sm btn-outline-primary rounded-3">Modifier</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
         </div>
     </div>
 {% endblock %}

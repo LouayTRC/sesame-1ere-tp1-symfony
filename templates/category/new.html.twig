@@ -1,11 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Category{% endblock %}
+{% block title %}Nouvelle catégorie{% endblock %}
 
 {% block body %}
-    <h1>Create new Category</h1>
+    <div>
+        <div class="row mb-5">
+            <div class="col">
+                <a href="{{ path('app_category_index') }}" class="btn btn-sm btn-outline-secondary" style="margin-bottom: 16px;">← Retour</a>
+                <h1 class="display-5" style="font-weight: 700; color: #333;">📁 Créer une catégorie</h1>
+                <p class="text-muted">Ajoutez une nouvelle catégorie pour organiser vos produits</p>
+            </div>
+        </div>
 
-    {{ include('category/_form.html.twig') }}
-
-    <a href="{{ path('app_category_index') }}">back to list</a>
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                {{ include('category/_form.html.twig') }}
+            </div>
+        </div>
+    </div>
 {% endblock %}

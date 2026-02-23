@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
@@ -14,16 +15,23 @@ class Product
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Le libellé est requis.')]
     private ?string $libelle = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: 'Le prix est requis.')]
+    #[Assert\Positive(message: 'Le prix doit être un nombre positif.')]
     private ?float $price = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private ?Category $Category = null;
 
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    private ?Qualite $qualite = null;
+
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $qualite = null;
+    private ?string $imageFilename = null;
 
     public function getId(): ?int
     {
@@ -66,14 +74,26 @@ class Product
         return $this;
     }
 
-    public function getQualite(): ?string
+    public function getQualite(): ?Qualite
     {
         return $this->qualite;
     }
 
-    public function setQualite(?string $qualite): static
+    public function setQualite(?Qualite $qualite): static
     {
         $this->qualite = $qualite;
+
+        return $this;
+    }
+
+    public function getImageFilename(): ?string
+    {
+        return $this->imageFilename;
+    }
+
+    public function setImageFilename(?string $imageFilename): static
+    {
+        $this->imageFilename = $imageFilename;
 
         return $this;
     }

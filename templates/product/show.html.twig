@@ -1,34 +1,63 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Product{% endblock %}
+{% block title %}Produit{% endblock %}
 
 {% block body %}
-    <h1>Product</h1>
+    <div>
+        <div class="row mb-4">
+            <div class="col">
+                <a href="{{ path('app_product_index') }}" class="btn btn-sm btn-outline-secondary" style="margin-bottom: 16px;">← Retour</a>
+                <h1 class="display-5" style="font-weight: 700; color: #333;">{{ product.libelle }}</h1>
+                <p class="text-muted">{{ product.category ? product.category.libelle : '—' }}</p>
+            </div>
+            <div class="col-auto d-flex gap-2 align-items-start">
+                <a href="{{ path('app_product_edit', {'id': product.id}) }}" class="btn rounded-3" style="background-color: #667eea; color: white; font-weight: 500;">Modifier</a>
+                {{ include('product/_delete_form.html.twig') }}
+            </div>
+        </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ product.id }}</td>
-            </tr>
-            <tr>
-                <th>Libelle</th>
-                <td>{{ product.libelle }}</td>
-            </tr>
-            <tr>
-                <th>Price</th>
-                <td>{{ product.price }}</td>
-            </tr>
-            <tr>
-                <th>Qualite</th>
-                <td>{{ product.qualite }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_product_index') }}">back to list</a>
-
-    <a href="{{ path('app_product_edit', {'id': product.id}) }}">edit</a>
-
-    {{ include('product/_delete_form.html.twig') }}
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card border-0 shadow-sm rounded-4" style="overflow: hidden;">
+                    {% if product.imageFilename %}
+                        <img src="{{ asset('uploads/products/' ~ product.imageFilename) }}" class="card-img-top" style="height: 300px; object-fit: cover;" alt="{{ product.libelle }}">
+                    {% else %}
+                        <div style="height: 300px; background: linear-gradient(135deg, #667eea15, #764ba215); display: flex; align-items: center; justify-content: center;">
+                            <span style="color: #ccc; font-size: 72px;">📷</span>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card border-0 shadow-sm rounded-4">
+                    <div class="card-header" style="background-color: #f8f9fa; border-bottom: 1px solid #eee;">
+                        <h5 class="mb-0" style="font-weight: 600; color: #333;">Informations</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <p class="text-muted small mb-1">Identifiant</p>
+                            <p class="fs-5" style="font-weight: 600;">#{{ product.id }}</p>
+                        </div>
+                        <div class="mb-4">
+                            <p class="text-muted small mb-1">Prix</p>
+                            <p class="fs-4" style="font-weight: 700; color: #667eea;">{{ product.price }} TND</p>
+                        </div>
+                        <div class="mb-4">
+                            <p class="text-muted small mb-1">Catégorie</p>
+                            <p class="fs-5">{{ product.category ? product.category.libelle : '—' }}</p>
+                        </div>
+                        {% if product.qualite %}
+                            <div class="mb-0">
+                                <p class="text-muted small mb-1">Qualité</p>
+                                <div style="display: inline-flex; align-items: center; gap: 8px;">
+                                    <div style="width: 24px; height: 24px; background-color: {{ product.qualite.couleur }}; border-radius: 6px;"></div>
+                                    <span class="badge rounded-3" style="background-color: {{ product.qualite.couleur }}; color: white; padding: 6px 12px;">{{ product.qualite.libelle }}</span>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

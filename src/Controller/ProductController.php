@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Product;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
+use App\Repository\QualiteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,10 +16,25 @@ use Symfony\Component\Routing\Attribute\Route;
 final class ProductController extends AbstractController
 {
     #[Route(name: 'app_product_index', methods: ['GET'])]
-    public function index(ProductRepository $productRepository): Response
+    public function index(Request $request, ProductRepository $productRepository, \App\Repository\CategoryRepository $categoryRepository, QualiteRepository $qualiteRepository): Response
     {
+        $categoryId = $request->query->getInt('category', 0);
+        $qualiteId = $request->query->getInt('qualite', 0);
+
+        $products = $productRepository->findByFilters(
+            $categoryId > 0 ? $categoryId : null,
+            $qualiteId > 0 ? $qualiteId : null
+        );
+
+        $categories = $categoryRepository->findAll();
+        $qualites = $qualiteRepository->findAllOrdered();
+
         return $this->render('product/index.html.twig', [
-            'products' => $productRepository->findAll(),
+            'products' => $products,
+            'categories' => $categories,
+            'qualites' => $qualites,
+            'selectedCategory' => $categoryId > 0 ? $categoryId : null,
+            'selectedQualite' => $qualiteId > 0 ? $qualiteId : null,
         ]);
     }
 
@@ -30,6 +46,19 @@ final class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // handle image upload
+            $imageFile = $form->get('image')->getData();
+            if ($imageFile) {
+                $uploadsDir = $this->getParameter('kernel.project_dir') . '/public/uploads/products';
+                $newFilename = uniqid().'.'.$imageFile->guessExtension();
+                try {
+                    $imageFile->move($uploadsDir, $newFilename);
+                    $product->setImageFilename($newFilename);
+                } catch (\Exception $e) {
+                    // ignore upload errors for now
+                }
+            }
+
             $entityManager->persist($product);
             $entityManager->flush();
 
@@ -57,6 +86,24 @@ final class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // handle image upload if present
+            $imageFile = $form->get('image')->getData();
+            if ($imageFile) {
+                $uploadsDir = $this->getParameter('kernel.project_dir') . '/public/uploads/products';
+                $newFilename = uniqid().'.'.$imageFile->guessExtension();
+                try {
+                    $imageFile->move($uploadsDir, $newFilename);
+                    // remove old image if exists
+                    $old = $product->getImageFilename();
+                    if ($old) {
+                        @unlink($uploadsDir . '/' . $old);
+                    }
+                    $product->setImageFilename($newFilename);
+                } catch (\Exception $e) {
+                    // ignore upload errors
+                }
+            }
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);

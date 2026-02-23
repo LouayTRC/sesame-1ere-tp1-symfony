@@ -1,3 +1,56 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
+{{ form_start(form, {'attr': {'class': 'needs-validation'}, 'render_rest': false}) }}
+<div class="card border-0 shadow-sm rounded-4">
+    <div class="card-header" style="background-color: #f8f9fa; border-bottom: 1px solid #eee;">
+        <h5 class="mb-0" style="font-weight: 600; color: #333;">Informations du produit</h5>
+    </div>
+    <div class="card-body">
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form_label(form.libelle, 'Nom du produit', {'label_attr': {'class': 'form-label', 'style': 'font-weight: 600;'}}) }}
+                    {{ form_widget(form.libelle, {'attr': {'class': 'form-control rounded-3', 'placeholder': 'Ex: Tomate biologique'}}) }}
+                    {{ form_errors(form.libelle, {'attr': {'class': 'alert alert-danger mt-2 rounded-3', 'style': 'padding: 8px 12px; font-size: 13px;'}}) }}
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="mb-3">
+                    {{ form_label(form.price, 'Prix (TND)', {'label_attr': {'class': 'form-label', 'style': 'font-weight: 600;'}}) }}
+                    {{ form_widget(form.price, {'attr': {'class': 'form-control rounded-3', 'placeholder': '0.00', 'step': '0.01'}}) }}
+                    {{ form_errors(form.price, {'attr': {'class': 'alert alert-danger mt-2 rounded-3', 'style': 'padding: 8px 12px; font-size: 13px;'}}) }}
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="mb-3">
+                    {{ form_label(form.category, 'Catégorie', {'label_attr': {'class': 'form-label', 'style': 'font-weight: 600;'}}) }}
+                    {{ form_widget(form.category, {'attr': {'class': 'form-select rounded-3'}}) }}
+                    {{ form_errors(form.category, {'attr': {'class': 'alert alert-danger mt-2 rounded-3', 'style': 'padding: 8px 12px; font-size: 13px;'}}) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="mb-3">
+                    {{ form_label(form.qualite, 'Qualité', {'label_attr': {'class': 'form-label', 'style': 'font-weight: 600;'}}) }}
+                    {{ form_widget(form.qualite, {'attr': {'class': 'form-select rounded-3'}}) }}
+                    {{ form_errors(form.qualite, {'attr': {'class': 'alert alert-danger mt-2 rounded-3', 'style': 'padding: 8px 12px; font-size: 13px;'}}) }}
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="mb-3">
+                    {{ form_label(form.image, 'Image du produit', {'label_attr': {'class': 'form-label', 'style': 'font-weight: 600;'}}) }}
+                    <div class="form-control rounded-3 p-0" style="border: 2px dashed #667eea; background-color: #f8f9fa;">
+                        {{ form_widget(form.image, {'attr': {'class': 'form-control border-0 rounded-3', 'accept': 'image/*', 'style': 'padding: 12px; cursor: pointer;'}}) }}
+                    </div>
+                    {{ form_errors(form.image, {'attr': {'class': 'alert alert-danger mt-2 rounded-3', 'style': 'padding: 8px 12px; font-size: 13px;'}}) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="border-top pt-4 mt-4 d-flex justify-content-between align-items-center">
+            <a href="{{ path('app_product_index') }}" class="btn btn-outline-secondary rounded-3">Annuler</a>
+            <button type="submit" class="btn rounded-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-weight: 500; padding: 8px 32px;">{{ form.save.vars.label ?? 'Enregistrer' }}</button>
+        </div>
+    </div>
+</div>
 {{ form_end(form) }}

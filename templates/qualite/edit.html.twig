@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier qualité{% endblock %}
+
+{% block body %}
+    <div>
+        <div class="row mb-5">
+            <div class="col">
+                <a href="{{ path('app_qualite_index') }}" class="btn btn-sm btn-outline-secondary" style="margin-bottom: 16px;">← Retour</a>
+                <h1 class="display-5" style="font-weight: 700; color: #333;">퉰c️ Modifier {{ qualite.libelle }}</h1>
+                <p class="text-muted">Mettez à jour les informations de la qualité</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                {{ include('qualite/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+
+                <div class="mt-4 pt-4 border-top">
+                    <h6 style="font-weight: 600; color: #dc3545; margin-bottom: 12px;">🚮 Zone de danger</h6>
+                    {{ include('qualite/_delete_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

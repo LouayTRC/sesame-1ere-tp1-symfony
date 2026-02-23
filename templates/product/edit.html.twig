@@ -1,13 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Product{% endblock %}
+{% block title %}Modifier produit{% endblock %}
 
 {% block body %}
-    <h1>Edit Product</h1>
+    <div>
+        <div class="row mb-5">
+            <div class="col">
+                <a href="{{ path('app_product_index') }}" class="btn btn-sm btn-outline-secondary" style="margin-bottom: 16px;">← Retour</a>
+                <h1 class="display-5" style="font-weight: 700; color: #333;">퉰c️ Modifier {{ product.libelle }}</h1>
+                <p class="text-muted">Mettez à jour les informations du produit</p>
+            </div>
+        </div>
 
-    {{ include('product/_form.html.twig', {'button_label': 'Update'}) }}
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                {{ include('product/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
 
-    <a href="{{ path('app_product_index') }}">back to list</a>
-
-    {{ include('product/_delete_form.html.twig') }}
+                <div class="mt-4 pt-4 border-top">
+                    <div class="row">
+                        <div class="col-md-8 offset-md-2">
+                            <h6 style="font-weight: 600; color: #dc3545; margin-bottom: 12px;">🚮 Zone de danger</h6>
+                            {{ include('product/_delete_form.html.twig') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

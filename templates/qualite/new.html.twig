@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle qualité{% endblock %}
+
+{% block body %}
+    <div>
+        <div class="row mb-5">
+            <div class="col">
+                <a href="{{ path('app_qualite_index') }}" class="btn btn-sm btn-outline-secondary" style="margin-bottom: 16px;">← Retour</a>
+                <h1 class="display-5" style="font-weight: 700; color: #333;">⭐ Créer une qualité</h1>
+                <p class="text-muted">Définissez une nouvelle qualité pour vos produits</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                {{ include('qualite/_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

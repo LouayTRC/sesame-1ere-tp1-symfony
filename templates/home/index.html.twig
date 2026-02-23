@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+    <div>
+        <div class="row mb-5">
+            <div class="col-12">
+                <h1 class="display-4 mb-2" style="font-weight: 700; color: #333;">Bienvenue 👋</h1>
+                <p class="text-muted fs-5">Gérez vos catégories, produits et qualités efficacement</p>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-6 mb-3">
+                <div class="card border-0 shadow-sm rounded-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3" style="font-weight: 600; opacity: 0.9;">📦 Produits</h6>
+                        <p class="display-5 mb-0" style="font-weight: 700;">{{ totalProducts }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="card border-0 shadow-sm rounded-4" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3" style="font-weight: 600; opacity: 0.9;">📂 Catégories</h6>
+                        <p class="display-5 mb-0" style="font-weight: 700;">{{ totalCategories }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 mb-4">
+                <h4 class="mb-3" style="font-weight: 600; color: #333;">🆕 Derniers produits</h4>
+                <div class="row">
+                {% for p in latestProducts %}
+                    <div class="col-md-4 mb-3">
+                        <div class="card border-0 shadow-sm rounded-3 h-100" style="overflow: hidden;">
+                            {% if p.imageFilename %}
+                                <img src="{{ asset('uploads/products/' ~ p.imageFilename) }}" class="card-img-top" style="height: 150px; object-fit: cover;" alt="{{ p.libelle }}">
+                            {% endif %}
+                            <div class="card-body d-flex flex-column">
+                                <h6 class="card-title" style="font-weight: 600;">{{ p.libelle }}</h6>
+                                <p class="text-muted small mb-2">{{ p.category ? p.category.libelle : '—' }}</p>
+                                <p class="fs-6" style="font-weight: 700; color: #667eea;">{{ p.price }} TND</p>
+                                <a href="{{ path('app_product_show', {'id': p.id}) }}" class="mt-auto btn btn-sm btn-gradient rounded-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">Voir détails</a>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="col-12">
+                        <p class="text-muted text-center">Aucun produit</p>
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <h4 class="mb-4" style="font-weight: 600; color: #333;">📁 Toutes les catégories</h4>
+                <div class="row">
+                    {% for c in categories %}
+                        <div class="col-6 col-md-4 col-lg-3 mb-3">
+                            <div class="card border-0 shadow-sm rounded-3 h-100" style="transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 12px 24px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 0.125rem 0.25rem rgba(0,0,0,0.075)'">
+                                <div class="card-body d-flex flex-column">
+                                    <h6 class="card-title" style="font-weight: 600; color: #333;">{{ c.libelle }}</h6>
+                                    <p class="text-muted small mb-3">
+                                        <i class="bi bi-bag"></i> 
+                                        <strong>{{ c.products|length }}</strong> 
+                                        produit{{ c.products|length > 1 ? 's' : '' }}
+                                    </p>
+                                    <a href="{{ path('app_category_show', {'id': c.id}) }}" class="mt-auto btn btn-sm rounded-3" style="background-color: #667eea; color: white; border: none; font-weight: 500;">Voir</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center col-12">Aucune catégorie</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

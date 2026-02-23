@@ -1,0 +1,30 @@
+{{ form_start(form, {'render_rest': false}) }}
+<div class="card border-0 shadow-sm rounded-4">
+    <div class="card-header" style="background-color: #f8f9fa; border-bottom: 1px solid #eee;">
+        <h5 class="mb-0" style="font-weight: 600; color: #333;">Informations de la qualité</h5>
+    </div>
+    <div class="card-body">
+        <div class="mb-4">
+            {{ form_label(form.libelle, 'Nom de la qualité', {'label_attr': {'class': 'form-label', 'style': 'font-weight: 600;'}}) }}
+            {{ form_widget(form.libelle, {'attr': {'class': 'form-control rounded-3', 'placeholder': 'Ex: Premium'}}) }}
+            {{ form_errors(form.libelle, {'attr': {'class': 'alert alert-danger mt-2 rounded-3', 'style': 'padding: 8px 12px; font-size: 13px;'}}) }}
+        </div>
+
+        <div class="mb-4">
+            {{ form_label(form.couleur, 'Couleur', {'label_attr': {'class': 'form-label', 'style': 'font-weight: 600;'}}) }}
+            <div style="display: flex; gap: 12px; align-items: center;">
+                {{ form_widget(form.couleur, {'attr': {'class': 'form-control rounded-3', 'style': 'height: 50px; width: 100px; cursor: pointer;'}}) }}
+                <div style="flex: 1; padding: 12px; background-color: #f8f9fa; border-radius: 12px; font-size: 13px;">
+                    Sélectionnez la couleur du badge de qualité
+                </div>
+            </div>
+            {{ form_errors(form.couleur, {'attr': {'class': 'alert alert-danger mt-2 rounded-3', 'style': 'padding: 8px 12px; font-size: 13px;'}}) }}
+        </div>
+
+        <div class="border-top pt-4 mt-4 d-flex justify-content-between align-items-center">
+            <a href="{{ path('app_qualite_index') }}" class="btn btn-outline-secondary rounded-3">Annuler</a>
+            <button type="submit" class="btn rounded-3" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; font-weight: 500; padding: 8px 32px;">{{ button_label|default('Enregistrer') }}</button>
+        </div>
+    </div>
+</div>
+{{ form_end(form) }}
